@@ -11,8 +11,9 @@ class URL(db.Model):
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.relationship("User", back_populates="urls")
-    clicks = db.relationship("Click", back_populates="urls", cascade="all, delete-orphan")
+    clicks = db.relationship("Click", back_populates="url", cascade="all, delete-orphan")
 
 
     def __repr__(self):
