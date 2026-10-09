@@ -58,3 +58,45 @@ def register():
             "is_active": user.is_active
             }
         }), 201
+
+@auth_bp.post("/login")
+def login():
+    data = request.get_json()
+
+    if not isinstance(data, dict):
+        return jsonify({"error": "Invalid input data format"}), 400
+
+    # Validate login input data
+    email = data.get("email")
+    password = data.get("password")
+
+    if not isinstance(email, str) or not isinstance(password, str):
+        return jsonify({"error": "Email and password are required"}), 400
+
+    email = email.strip().lower()
+
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
+
+    
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not user.check_password(password):
+        return jsonify({"error": "Invalid email or password"}), 400
+
+    if not user.email:
+        return jsonify({"error": "Invalid email"}), 400
+
+    if not user.check_password(password):
+        return jsonify({"error": "Invalid email or password"}), 400
+
+    return jsonify({
+        "message": "User logged in successfully",
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "created_at": user.created_at.isoformat(),
+            "is_active": user.is_active
+        }
+    }), 200
