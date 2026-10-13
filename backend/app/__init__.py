@@ -5,6 +5,7 @@ from app.extensions import db, migrate, jwt, CORS
 
 from app.routes.auth import auth_bp
 from app.routes.urls import urls_bp
+from app.routes.redirect import redirect_bp
 
 
 def create_app(config_class=Config):
@@ -19,6 +20,7 @@ def create_app(config_class=Config):
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(urls_bp)
+    app.register_blueprint(redirect_bp)
 
     from app import models
 
