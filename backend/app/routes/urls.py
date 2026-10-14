@@ -53,4 +53,26 @@ def create_url():
         }
     }), 201
 
+@urls_bp.get("")
+@jwt_required()
+def get_user_urls():
+    user_id = int(get_jwt_identity())
 
+    urls = (
+        URL.query.filter_by(user_id=user_id)
+        .order_by(URL.created_at.desc())
+        .all()
+    )
+
+    return jsonify({
+        "urls": [
+            {
+                "id": url.id,
+                "original_url": url.original_url,
+                "short_code": url.short_code,
+                "created_at": url.created_at.isoformat(),
+                "user_id": url.user_id
+            }
+            for url in urls
+        ]
+    }), 200
