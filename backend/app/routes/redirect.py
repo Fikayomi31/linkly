@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect
 
 from app.extensions import db
 from app.models import URL, Click
@@ -21,4 +21,4 @@ def redirect_to_original(short_code):
     db.session.commit()
 
 
-    return jsonify({"original_url": url.original_url}), 302
+    return redirect(url.original_url, code=302)

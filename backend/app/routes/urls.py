@@ -30,6 +30,20 @@ def create_url():
     if not user or not user.is_active:
         return jsonify({"error": "User not found or inactive"}), 404
 
+    existing_url = URL.query.filter_by(original_url=original_url, user_id=user.id).first()
+
+    if existing_url:
+        return jsonify({
+            "message": "URL already exists",
+            "url": {
+                "id": existing_url.id,
+                "original_url": existing_url.original_url,
+                "short_code": existing_url.short_code,
+                "created_at": existing_url.created_at.isoformat(),
+                "user_id": existing_url.user_id
+            }
+        }), 400
+
     short_code = create_unique_short_code()
 
     new_url = URL(original_url=original_url, short_code=short_code, user_id=user.id)
@@ -75,4 +89,25 @@ def get_user_urls():
             }
             for url in urls
         ]
+    }), 200
+
+
+
+@urls_bp.get("/<int:url_id>")
+@jwt_required()
+def get_url(url_id):
+    user_id = int(get_jwt_identity())
+    
+    url = URL.query.filter_by(id=url_id, user_id=user_id).first() 
+
+    if not url:
+        return jsonify({"error": "URL not found"}), 404
+    return jsonify({
+        "url": {
+            "id": url.id,
+            "original_url": url.original_url,
+            "short_code": url.short_code,
+            "created_at": url.created_at.isoformat(),
+            "user_id": url.user_id
+        }
     }), 200
