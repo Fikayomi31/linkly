@@ -21,6 +21,7 @@ def create_url():
 
     parsed_url = urlparse(original_url)
 
+    # scheme protocol and netloc (domain) are required for a valid URL
     if not parsed_url.scheme or not parsed_url.netloc:
         return jsonify({"error": "Invalid URL format"}), 400
 
