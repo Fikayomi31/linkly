@@ -164,5 +164,19 @@ def update_url(url_id):
             "created_at": url.created_at.isoformat(),
             "user_id": url.user_id
         }
-    })        
+    }), 200
 
+@urls_bp.delete("/<int:url_id>")
+@jwt_required()
+def delete_url(url_id):
+    user_id = int(get_jwt_identity())
+
+    url = URL.query.filter_by(id=url_id, user_id=user_id).first()
+
+    if not url:
+        return jsonify({"error": "URL not found"}), 404
+
+    db.session.delete(url)
+    db.session.commit()
+
+    return jsonify({"message": "URL deleted successfully"}), 200
