@@ -1,11 +1,10 @@
-from backend.app.models.click import Click
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
 from urllib.parse import urlparse
 
 from app.extensions import db
-from app.models import URL, User
+from app.models import URL, User, Click
 from app.utils.shortener import create_unique_short_code
 
 urls_bp = Blueprint("urls", __name__, url_prefix="/api/urls")
@@ -209,13 +208,6 @@ def get_url_analytics(url_id):
             "user_id": url.user_id
         },
         "total_clicks": len(clicks),
-        "clicks": [
-            {
-                "clicked_at": click.clicked_at.isoformat(),
-                "user_agent": click.user_agent,
-                "referrer": click.referrer
-            }
-            for click in clicks
-        ]
+        
     }), 200
 
