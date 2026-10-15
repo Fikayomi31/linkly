@@ -112,3 +112,57 @@ def get_url(url_id):
             "user_id": url.user_id
         }
     }), 200
+
+
+@urls_bp.put("/<int:url_id>")
+@jwt_required()
+def update_url(url_id):
+
+    user_id = int(get_jwt_identity())
+
+    # Find the URL by ID and user ID
+    url = URL.query.filter_by(id=url_id, user_id=user_id).first()
+
+    if not url:
+        return jsonify({"error": "URL not found"}), 404
+
+    data = request.get_json(silent=True)
+
+    if not isinstance(data, dict):
+        return jsonify({"error": "Invalid input data format"}), 400
+
+    original_url = data.get("original_url")
+
+    if not isinstance(original_url, str) or not original_url.strip():
+        return jsonify({"error": "Original URL is required"}), 400
+
+    original_url = original_url.strip()
+    parsed_url = urlparse(original_url)
+    if not parsed_url.scheme or not parsed_url.netloc:
+        return jsonify({"error": "Invalid URL format"}), 400
+
+    # Check if the new original URL already exists for this user
+    existing_url = URL.query.filter_by(original_url=original_url, user_id=user_id).first()
+
+    if existing_url:
+        return jsonify({"error": "URL already exists"}), 400
+
+    url.original_url = original_url
+
+    try:
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        raise
+
+    return jsonify({
+        "message": "URL updated successfully",
+        "url": {
+            "id": url.id,
+            "original_url": url.original_url,
+            "short_code": url.short_code,
+            "created_at": url.created_at.isoformat(),
+            "user_id": url.user_id
+        }
+    })        
+
