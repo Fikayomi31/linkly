@@ -1,7 +1,12 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
 from urllib.parse import urlparse
+
+from io import BytesIO
+import qrcode
+
+
 
 from app.extensions import db
 from app.models import URL, User, Click
@@ -211,3 +216,23 @@ def get_url_analytics(url_id):
         
     }), 200
 
+@urls_bp.get("/<int:url_id>/qrcode")
+@jwt_required()
+def generate_qrcode(url_id):
+    user_id = int(get_jwt_identity())
+    url = URL.query.filter_by(id=url_id, user_id=user_id).first()
+
+    if not url:
+        return jsonify({"error": "URL not found"}), 404
+
+    short_url = (
+        f"{request.host_url.rstrip('/')}/{url.short_code}"
+    )
+
+    qrcode_img = qrcode.make(short_url)
+
+    image_buffer = BytesIO()
+    qrcode_img.save(image_buffer, format="PNG")
+    image_buffer.seek(0)
+
+    return send_file(image_buffer, mimetype="image/png", as_attachment=True, download_name=f"{url.short_code}.png")
