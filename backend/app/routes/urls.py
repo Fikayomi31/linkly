@@ -1,3 +1,4 @@
+from backend.app.models.click import Click
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
@@ -180,3 +181,41 @@ def delete_url(url_id):
     db.session.commit()
 
     return jsonify({"message": "URL deleted successfully"}), 200
+
+@urls_bp.get("/<int:url_id>/analytics")
+@jwt_required()
+def get_url_analytics(url_id):
+
+    user_id = int(get_jwt_identity())
+
+    # Find the URL by ID and user ID
+    url = URL.query.filter_by(id=url_id, user_id=user_id).first()
+
+    if not url:
+        return jsonify({"error": "URL not found"}), 404
+
+    clicks = (
+        Click.query.filter_by(url_id=url.id)
+        .order_by(Click.clicked_at.desc())
+        .all()
+    )
+
+    return jsonify({
+        "url": {
+            "id": url.id,
+            "original_url": url.original_url,
+            "short_code": url.short_code,
+            "created_at": url.created_at.isoformat(),
+            "user_id": url.user_id
+        },
+        "total_clicks": len(clicks),
+        "clicks": [
+            {
+                "clicked_at": click.clicked_at.isoformat(),
+                "user_agent": click.user_agent,
+                "referrer": click.referrer
+            }
+            for click in clicks
+        ]
+    }), 200
+
