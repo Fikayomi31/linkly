@@ -9,9 +9,9 @@
     border-color: #252d42;
 }
 .auth-page.dark .password-input-field {
-    background-color: #0c1324;
+    background-color: #f8fafc;
     border-color: #303a52;
-    color: #f8fafc;
+    color: #0c1324;
 }
 
 /* Light theme */
@@ -37,9 +37,14 @@
 }
 .auth-page.light .password-input-field {
     background-color: #ffffff;
-    border-color: #cbd;
+    border-color: #cbd5e1;
     color: #0f172a;
 }
+.auth-page.light .password-input-field::placeholder {
+    color: #94a3b8;
+
+}
+
 
 .auth-page {
     min-height: 100vh;
@@ -99,6 +104,7 @@
     font-size: 14px;
     font-weight: 600;
 }
+
 
 .auth-card input {
     width: 100%;

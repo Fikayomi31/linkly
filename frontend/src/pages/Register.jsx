@@ -109,6 +109,7 @@ function Register() {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Create a password"
                         name="password"
+                        id="password"
                     />
                     <label htmlFor="confirmPassword">Confirm Password</label>
                     <PasswordInput
