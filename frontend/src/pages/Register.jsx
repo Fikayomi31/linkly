@@ -9,6 +9,7 @@ import "./Auth.css"
 
 function Register() {
     const navigate = useNavigate();
+    
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -115,7 +116,7 @@ function Register() {
                     <PasswordInput
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Confirm your password"
+                        placeholder="Enter password again"
                         name="confirmPassword"
                     />
                     <button type="submit" disabled={loading}>
