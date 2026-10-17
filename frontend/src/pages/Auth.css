@@ -65,9 +65,20 @@
 
 .auth-card h1 {
     margin: 0 0 10px;
-    font-size: 28px;
+    font-size: clamp(28px, 4vw, 28px);
+    
     line-height: 1.3;
     letter-spacing: -0.8px;
+    background: linear-gradient(
+        90deg,
+        #1762ff,
+        #b34be5,
+        #fa459f,
+        #315bff
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .auth-card > p {
