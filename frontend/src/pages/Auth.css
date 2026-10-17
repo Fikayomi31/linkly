@@ -16,7 +16,7 @@
 
 /* Light theme */
 .auth-page.light {
-    background: #ffffff;
+    background: #dfe7e5;
     color: #0f172a;
     box-shadow: 0 20px 60px rgb(15 23 42/ 8%);
 }
@@ -25,9 +25,19 @@
     color: #64748b;
 }
 
-.auth-card.light .password-input-field {
-    background-color: #ffffff;
+.auth-page.light .auth-card {
+    background: #ffffff;
     border-color: #cbd5e1;
+    color: #0f172a;
+}
+.auth-page.light .auth-card label {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+.auth-page.light .password-input-field {
+    background-color: #ffffff;
+    border-color: #cbd;
     color: #0f172a;
 }
 
@@ -85,8 +95,8 @@
     border: 1px solid #303a52;
     border-radius: 10px;
     outline: none;
-    background: #0c1324;
-    color: #ffffff;
+    background: #ffffff;
+    color: #0c1324;
     font: inherit;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
