@@ -1,3 +1,36 @@
+/* Dark theme */
+.auth-page.dark {
+    background: #0b1020;
+    color: #f8fafc;
+}
+
+.auth-page.dark .auth-card {
+    background: #121a2d;
+    border-color: #252d42;
+}
+.auth-page.dark .password-input-field {
+    background-color: #0c1324;
+    border-color: #303a52;
+    color: #f8fafc;
+}
+
+/* Light theme */
+.auth-page.light {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 20px 60px rgb(15 23 42/ 8%);
+}
+
+.auth-page.light .auth-card > p {
+    color: #64748b;
+}
+
+.auth-card.light .password-input-field {
+    background-color: #ffffff;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
 .auth-page {
     min-height: 100vh;
     display: flex;

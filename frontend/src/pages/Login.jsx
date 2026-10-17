@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/common/PasswordInput";
 import api from "../services/api";
 import useAuthStore  from "../stores/authStore";
+import { useThemeStore } from "../stores/themeStore";
+
+import "./Auth.css"
 
 function Login() {
     const navigate = useNavigate();
@@ -12,6 +15,8 @@ function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const theme = useThemeStore((state) => state.theme);    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,7 +48,7 @@ function Login() {
     };
 
     return (
-        <main className="auth-page">
+        <main className={`auth-page ${theme}`}>
             <section className="auth-card">
                 <h1>Welcome back</h1>
                 <p>Log in to manage your Linkly links.</p>
@@ -76,7 +81,7 @@ function Login() {
                 </form>
 
                 <p>
-                    Don't have an account? <Link to="/register"><Register></Register></Link>
+                    Don't have an account? <Link to="/register">Register</Link>
                 </p>
             </section>
 

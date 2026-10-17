@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Routes, Route } from "react-router-dom";
+import { useThemeStore } from "./stores/themeStore";
 
 import "./App.css";
 import Login from "./pages/Login";
@@ -38,11 +39,12 @@ const simpleUrls = [
 function Home() {
   const [urls, setUrls] = useState(simpleUrls);
   const [originalUrl, setOriginalUrl] = useState("");
-  const [darkTheme, setDarkTheme] = useState(true);
+  const { theme, toggleTheme } = useThemeStore();
   const [message, setMessage] = useState("");
 
   function handleShorten(event) {
     event.preventDefault();
+
 
     if (!originalUrl.trim()) {
       setMessage("Please enter a valid URL.");
@@ -55,7 +57,7 @@ function Home() {
   }
 
   return (
-    <main className={darkTheme ? "app dark" : "app light"}>
+    <main className={`app ${theme}`}>
       <header className="nav">
         <div>
           <a className="logo" href="/">
@@ -110,8 +112,8 @@ function Home() {
       <section className="list-section">
         <div className="table-heading">
           <h2>Your Links</h2>
-          <button className="theme-toggle" onClick={() => setDarkTheme(!darkTheme)}>
-            {darkTheme ? "* Light theme" : "☾ Dark theme"}
+          <button className="theme-toggle" onClick={toggleTheme}>
+            {theme === "dark" ? "☀ Light theme" : "☾ Dark theme"}
           </button>
         </div>
 

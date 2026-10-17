@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/common/PasswordInput";
 import api from "../services/api";
+
+import { useThemeStore } from "../stores/themeStore";
+
 import "./Auth.css"
 
 function Register() {
@@ -14,6 +17,8 @@ function Register() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("")
     const [loading, setLoading] = useState(false);
+
+    const theme = useThemeStore((state) => state.theme);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,7 +64,7 @@ function Register() {
     };
 
     return (
-        <main className="auth-page">
+        <main className={`auth-page ${theme}`}>
             <section className="auth-card">
                 <h1>Create your Linkly account</h1>
                 <p>Sign up to shorten and manage your links.</p>
