@@ -1,5 +1,11 @@
 import { useState } from "react";
+import { Link, Routes, Route } from "react-router-dom";
+
 import "./App.css";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+
 
 const simpleUrls = [
   {
@@ -29,7 +35,7 @@ const simpleUrls = [
 },
 ];
 
-function App() {
+function Home() {
   const [urls, setUrls] = useState(simpleUrls);
   const [originalUrl, setOriginalUrl] = useState("");
   const [darkTheme, setDarkTheme] = useState(true);
@@ -58,12 +64,11 @@ function App() {
         </div>
         <div>
           <nav className="nav-actions">
-            <a className="login-link" href="/login">
-              Login ↗
-            </a>
-            <a className="register-button" href="/register">
-              Register Now
-            </a>
+            <Link to="/login" className="login-link">Login ↗</Link>
+            
+            <Link to="/register" className="register-button">Register Now</Link>
+            
+            
           </nav>
         </div>
 
@@ -175,6 +180,20 @@ function App() {
 
 
 }
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      
+      <Route path="*" element={<Home />} />
+    </Routes>
+  );
+}
+
+
 
 
 export default App;

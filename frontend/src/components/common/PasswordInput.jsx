@@ -34,3 +34,5 @@ function PasswordInput({ value, onChange, placeholder="Enter password", name="pa
     )
 
 }
+
+export default PasswordInput
