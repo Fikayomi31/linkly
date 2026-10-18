@@ -1,0 +1,341 @@
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    width: 100%;
+    min-height: 76px;
+    box-sizing: border-box;
+    padding: 14px 6%;
+
+    border-bottom: 1px solid var(--navbar-border);
+    background: var(--nav-bg);
+    color: var(--navbar-text);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease;
+}
+
+/* Theme colors */
+.navbar.dark {
+    --navbar: rgba(10, 15, 30, 0.94);
+    --navbar-text: #f1f5f9;
+    --navbar-muted: #a1acc0;
+    --navbar-border: rgba(148, 168, 184, 0.16);
+    --navbar-hover: rgba(148, 168, 184, 0.12);
+    --navbar-accent: #718bff;
+    --navbar-accent-hover: #8ba0ff;
+    --navbar-button-text: #ffffff;
+}
+
+.navbar.light {
+    --navbar-bg: rgba(255, 255, 255, 0.94);
+    --navbar-text: #172033;
+    --navbar-muted: #64748b;
+    --navbar-border: #e5eaf2;
+    --navbar-hover: #f1f5f9;
+    --navbar-accent: #4f63e8;
+    --navbar-accent-hover: #3f50cf;
+    --navbar-button-text: #ffffff;
+    
+}
+
+/* Logo */
+.navbar-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+
+    color: var(--navbar-text);
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-decoration: none;
+}
+
+.navbar-logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #718bff, #8b5cf6);
+    box-shadow: 0 5px 14px rgba(100, 116, 255, 0.22);
+}
+
+
+/* Main navigate links */
+.navbar-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.navbar-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    color: var(--navbar-muted);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.navbar-link:hover {
+    color: var(--navbar-text);
+    background: var(--navbar-hover);
+}
+
+/* Right-side actions */
+
+.navnar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+    padding: 0;
+
+    border: 1px solid var(--navbar-border);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--navbar-text);
+
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+.theme-toggle:hover {
+    background: var(--navbar-hover);
+    transform: translateY(-1px);
+}
+
+/* login and register */
+
+.navbar-auth-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-login {
+    padding: 10px 14px;
+    border-radius: 10px;
+
+    color: var(--navbar-text);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.navbar-login:hover {
+    background: var(--navbar-hover);
+
+}
+
+.navbar-register {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px 18px;
+    border-radius: 11px;
+
+    background: var(--navbar-accent);
+    color: var(--navbar-button-text);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+
+    box-shadow: 0 4px 12px rgba(79, 99, 232, 0.18);
+    transition: 
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.navbar-register:hover {
+    background: var(--navbar-accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(79, 99, 232, 0.24);
+}
+
+/* logged-in user */
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.navbar-greeting {
+    max-width: 180px;
+    overflow: hidden;
+    color: var(--navbar-text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.navbar-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 13px;
+    border: 1px solid var(--navbar-border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--navbar-text);
+
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.navbar-logout:hover {
+    background: var(--navbar-hover);
+    border-color: var(--navbar-muted);
+}
+
+
+/* Keyboard accessibility */
+
+.navbar a:focus-visible,
+.navbar button:focus-visible {
+  outline: 2px solid var(--navbar-accent);
+  outline-offset: 3px;
+}
+
+/* Tablet & mobile layout */
+@media (max-width: 760px) {
+    .navbar {
+        flex-wrap: wrap;
+        gap: 14px;
+        padding: 14px 5%;
+    }
+
+    .navbar-logo {
+        font-size: 1.3rem;
+    }
+
+    .navbar-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        padding-top: 8px;
+        border-top: 1px solid var(--navbar-border);
+    }
+
+    .navbar-link {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 8px;
+    }
+
+    .navbar-actions {
+        gap: 8px;
+        margin-left: auto;
+    }
+
+    .navbar-user {
+        gap: 8px;
+    }
+
+    .navbar-greeting {
+        max-width: 100px;
+        font-size: 0.82rem;
+    }
+
+    .navbar-login,
+    .navbar-register {
+        padding: 9px 11px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 42opx) {
+    .navbar {
+        padding: 12px 4%;
+    }
+
+    .navbar-logo {
+        gap: 7px;
+        font-size: 1.15rem;
+    }
+
+    .navbar-logo-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+    }
+
+    .navbar-actions {
+    gap: 6px;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .navbar-greeting {
+    display: none;
+  }
+
+  .navbar-logout {
+    gap: 5px;
+    padding: 9px;
+    font-size: 0.82rem;
+  }
+
+  .navbar-auth-links {
+    gap: 4px;
+  }
+
+  .navbar-login,
+  .navbar-register {
+    padding: 9px 8px;
+    font-size: 0.8rem;
+  }
+}
+
