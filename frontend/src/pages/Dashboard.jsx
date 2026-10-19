@@ -1,110 +1,163 @@
-import { useEffect, useState } from "react";
-import { Link, replace, useNavigate } from "react-router-dom";
-import api from "../services/api";
-import useAuthStore from "../stores/authStore";
-import { useThemeStore } from "../stores/themeStore";
 
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../services/api";
+import useAuthStore  from "../stores/authStore";
+import { useThemeStore } from "../stores/themeStore";
 import "./Auth.css";
 
 
+
+
 function Dashboard() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-    const user = useAuthStore((state) => state.user);
-    const logout = useAuthStore((state) => state.logout);
-    const theme = useThemeStore((state) => state.theme);
+  
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+  const [urls, setUrls] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const { theme, toggleTheme } = useThemeStore();
 
-    const [url, setUrl] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+  const [originalUrl, setOriginalUrl] = useState("");
+  const [message, setMessage] = useState("");
+  
+   useEffect(() => {
+    api.get("/urls").then((res) => {
+        setUrls(res.data)
+    })
+   })
 
-    useEffect(() => {
-        let cancelled = false;
 
-        async function fetchUrls() {
-            try {
-                const response = await api.get("/urls")
+  function handleLogout() {
+    logout();
+    navigate("/login", { replace: true });
+  }
 
-                if (!cancelled) {
-                    const data = response.data;
-                    setUrls(Array.isArray(data) ? data : data.urld || [])
-                }
-            } catch (err) {
-                if (!cancelled) {
-                    if (err.response?.status === 402) {
-                        logout();
-                        navigate("/login", { replace: true });
-                        return;
-                    }
+  return (
+    <main className={`app ${theme}`}>
+      <header className="nav">
+        <div>
+          <a className="logo" href="/">
+            Linkly<span>®</span>
+          </a>
+        </div>
+        <div>
+          <nav className="nav-actions">
+            <Link to="/login" className="login-link">Login ↗</Link>
+            
+            <Link to="/register" className="register-button">Register Now</Link>
+            
+            
+          </nav>
+        </div>
 
-                    setError(
-                        err.response?.data?.message ||
-                          "Could not load your links. Please try again"
-                    );
-                }
-            } finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
-            }
-        }
+      </header>
 
-        fetchUrls();
+      <section className="hero">
+        <h1>Shorten Your Links</h1>
+        <p>
+          Linkly is an efficient and easy to use URL shortrning
+          service that streamlines your online experience.
+        </p>
+        <form className="shorten-form" onSubmit={handleShorten}>
+          <span className="link-icon">↗</span>
+          <input
+            type="url"
+            placeholder="Enter your link here"
+            value={originalUrl}
+            onChange={(event) => {
+              setOriginalUrl(event.target.value);
+              setMessage("");
+            }}
+            aria-label="Enter your link here"
+          />
+          <button type="submit">
+            Shorten Now!
+          </button>
 
-        return () => {
-            cancelled = true;
-        };
-    }, [logout, navigate]);
+        </form>
+        {message && <p className="message">{message}</p>}
 
-    function handleLogout() {
-        logout();
-        navigate("/login", { replace: true });
-    }
+        <p className="usage-note">
+          You can create <strong>05</strong> more links.{" "}
+          <a href="/register" className="register-link">
+            Register now
+          </a> to enjoy unlimited usage
 
-    return (
-        <main className={`dashboard-page ${theme}`}>
-            <section className="auth card dashboard-card">
-                <h1>Linkly Dashboard</h1>
+        </p>
+      </section>
+      <section className="list-section">
+        <div className="table-heading">
+          <h2>Your Links</h2>
+          <button className="theme-toggle" onClick={toggleTheme}>
+            {theme === "dark" ? "☀ Light theme" : "☾ Dark theme"}
+          </button>
+        </div>
 
-                <p>
-                    Welcome, {user?.username ? `, ${user.username}` : ""}!
-                    Manage your shortened links here.
-                </p>
+        <div className="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Short Link</th>
+                <th>Original Link</th>
+                <th>QR Code</th>
+                <th>Clicks</th>
+                <th>Status</th>
+                <th>Date Created</th>
+              </tr>
+            </thead>
 
-                <div className="dashboard-actions">
-                    <Link to="/" className="dashboard-link">Home</Link>
-        
-                    <button onClick={handleLogout}>Log out
+            <tbody>
+              {urls.map((url) => (
+                <tr key={url.id}>
+                  <td>
+                    <div className="short-link">
+                      <a href={`http://127.0.01:5000/${url.shortCode}`} target="_blank" rel="noopener noreferrer">
+                        linkly.co/{url.shortCode}
+                      </a>
+                      <button className="copy-button"
+                        title="Copy short link"
+                        onClick={() => 
+                          navigator.clipboard.writeText(
+                            `http://127.0.01:5000/${url.shortCode}`
+                          )
+                        }
+                      >
+                        ▢
+                      </button>
+                    </div>
+                  </td>
+                  <td className="original-link">
+                    <a className="original-link" href={url.originalUrl} target="_blank">
+                      {url.originalUrl}
+                    </a>
+                  </td>
+                  <td>
+                    <span className="qr-placeholder">▦</span>
+                  </td>
+                  <td>{url.clicks}</td>
+                  <td>
+                    <span className={url.active ? "status active" : "status inactive"}
 
-                    </button>
-                </div>
+                    >
+                      {url.active ? "● Active" : "● Inactive"}
+                      
+                    </span>
+                  </td>
+                  <td>{url.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-                <h2>Your links</h2>
-                    {loading && <p>loading your links...</p>}
+        </div>
 
-                    {error && (
-                        <p className="auth-error">{error}</p>
-                    )}
+      </section>
 
-                    {!loading && !error && url.length === 0 && (
-                        <p>You have no links yet. Start by shortening a link on the <Link to="/">home page</Link>.</p>
-                    )}
-
-                    {!loading && !error && url.length > 0 && (
-                        <ul className="dashboard-url-list">
-                            {urls.map((url) => (
-                                <li key={url.id}>
-                                    <strong>{url.short_code || url.shortCode}</strong>
-                                    <p>{url.original_url || url.originalUrl}</p>
-                                </li>
-                            ))}
-
-                        </ul>
-                    )}
-            </section>
-        </main>
-    )
+    </main>
+  );
 }
-
 
 export default Dashboard;

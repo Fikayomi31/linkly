@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Sun, Moon, Logout, Link2 } from "lucide-react";
-import { useAuthStore } from "../stores/authStore";
+import { Sun, Moon, LogOut, Link2 } from "lucide-react";
+import useAuthStore from "../stores/authStore";
 import { useThemeStore } from "../stores/themeStore";
 
 
@@ -58,7 +58,7 @@ function Navbar() {
                             onClick={handleLogout}
                             aria-label="Logout"
                         >
-                            <Logout size={19} />
+                            <LogOut size={19} />
                             <span>Logout</span>
                         </button>
                     </div>

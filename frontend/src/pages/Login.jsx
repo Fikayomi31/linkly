@@ -1,50 +1,30 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/common/PasswordInput";
-import api from "../services/api";
-import useAuthStore  from "../stores/authStore";
+import useAuthStore from "../stores/authStore";
 import { useThemeStore } from "../stores/themeStore";
-
-import "./Auth.css"
+import "./Auth.css";
 
 function Login() {
     const navigate = useNavigate();
-    const setAuth = useAuthStore((state) => state.setAuth)
+    const login = useAuthStore((state) => state.login);
+    const loading = useAuthStore((state) => state.loading);
+    const error = useAuthStore((state) => state.error);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
 
     const theme = useThemeStore((state) => state.theme);    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        setError("");
-        setLoading(true);
+        const result = await login(email, password);
 
-        try {
-            const res = await api.post("/login", {email, password});
-
-            const data = res.data;
-
-            // Save the token and user info
-            setAuth(data.access_token, data.user);
-
-            navigate("/dashboard");
-
-        } catch (err) {
-            setError(
-                err.res?.data?.message ||
-                err.res?.data?.error ||
-                "Login failed. Check your email and password"
-            );
-        } finally {
-            setLoading(false);
+        if (result.success) {
+            navigate("/dashboard", {replace: true});
         }
-
-        
+        console
     };
 
     return (
@@ -70,7 +50,7 @@ function Login() {
                     <PasswordInput
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter ypur password"
+                        placeholder="Enter your password"
                         name="password"
                         autoComplete="current-password"
                         required
@@ -84,9 +64,8 @@ function Login() {
                     Don't have an account? <Link to="/register">Register</Link>
                 </p>
             </section>
-
         </main>
-    )
+    );
 }
 
-export default Login
+export default Login;
