@@ -15,48 +15,55 @@ function Dashboard() {
   const [error, setError] = useState("");
   const { theme, toggleTheme } = useThemeStore();
 
+  const [qrImage, setQrImage] = useState(null);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [originalUrl, setOriginalUrl] = useState("");
   const [message, setMessage] = useState("");
 
   // Fetch URLs from Flask backend on mount
   useEffect(() => {
-    let cancelled = false;
-
-    async function fetchUrls() {
+    const fetchUrls = async () => {
       try {
         const response = await api.get("/urls");
-
-        if (!cancelled) {
-          const data = response.data;
-          setUrls(Array.isArray(data) ? data : data.urls || []);
-        }
+        const data = response.data;
+        
+        // Save the links to state
+        setUrls(Array.isArray(data) ? data : data.urls || []);
       } catch (err) {
-        if (!cancelled) {
-          if (err.response?.status === 401 || err.response?.status === 422) {
-            logout();
-            navigate("/login", { replace: true });
-            return;
-          }
+        // If token expired, log out and send to login
+        if (err.response?.status === 401 || err.response?.status === 422) {
+          logout();
+          navigate("/login", { replace: true });
+          return;
+        }
 
-          setError(
-            err.response?.data?.message ||
-              "Could not load your links. Please try again."
-          );
-        }
+        // Otherwise, show the error message
+        setError(
+          err.response?.data?.message ||
+            "Could not load your links. Please try again."
+        );
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        // Always stop loading when done
+        setLoading(false);
       }
-    }
+    };
 
     fetchUrls();
-
-    return () => {
-      cancelled = true;
-    };
   }, [logout, navigate]);
 
+  async function handleViewQr(urlId) {
+    try {
+        const response = await api.get(`urls/${urlId}/qrcode`, {
+            responseType: "blob", // Important for binary data
+        })
+
+        const imageUrl = URL.createObjectURL(response.data);
+        setQrImage(imageUrl);
+        setIsQrModalOpen(true);
+    } catch (error) {
+        console.error("Error fetching QR code:", error);
+    }
+  }
   // Handle creating a new short link
   async function handleShorten(e) {
     e.preventDefault();
@@ -201,7 +208,13 @@ function Dashboard() {
                       </a>
                     </td>
                     <td>
-                      <span className="qr-placeholder">▦</span>
+                      <button className="qr-placeholder"
+                        title="Click to view QR Code"
+                        onClick={() => handleViewQr(url.id)}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                      >
+                        ▦
+                      </button>
                     </td>
                     <td>{url.clicks ?? 0}</td>
                     <td>
@@ -217,6 +230,22 @@ function Dashboard() {
           </table>
         </div>
       </section>
+      {/* Move the Modal here so it floats cleanly over everything */}
+      {isQrModalOpen && (
+        <div className="qr-modal-overlay" onClick={() => setIsQrModalOpen(false)}>
+          <div className="qr-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>QR Code</h3>
+            {qrImage ? (
+              <img src={qrImage} alt="Generated QR Code" style={{ width: "200px", height: "200px" }} />
+            ) : (
+              <p>Loading...</p>
+            )}
+            <button type="button" onClick={() => setIsQrModalOpen(false)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
