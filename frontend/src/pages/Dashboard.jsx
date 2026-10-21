@@ -210,13 +210,13 @@ function Dashboard() {
                     <td>
                       <button className="qr-placeholder"
                         title="Click to view QR Code"
-                        onClick={() => handleViewQr(url.id)}
+                        onClick={() => handleViewQr(urls.id)}
                         style={{ background: 'none', border: 'none', cursor: 'pointer' }}
                       >
                         ▦
                       </button>
                     </td>
-                    <td>{url.clicks ?? 0}</td>
+                    <td>{urls.clicks ?? 0}</td>
                     <td>
                       <span className={isActive ? "status active" : "status inactive"}>
                         {isActive ? "● Active" : "● Inactive"}

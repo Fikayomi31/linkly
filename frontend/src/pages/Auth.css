@@ -237,3 +237,15 @@
   color: white;
   cursor: pointer;
 }
+
+
+.dashboard-click-count {
+  margin-top: 10px !important;
+  color: #8b9bff !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.dashboard-page.light .dashboard-click-count {
+  color: #4f63e8 !important;
+}
