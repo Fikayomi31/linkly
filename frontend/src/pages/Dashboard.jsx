@@ -186,7 +186,7 @@ function Dashboard() {
     navigate("/login", { replace: true });
   }
 
-  // Build the short-link URL using the configured backend base URL.
+  // The short-link URL using the configured backend base URL.
   function getShortUrl(shortCode) {
     const apiBase =
       import.meta.env.VITE_API_BASE_URL ||
