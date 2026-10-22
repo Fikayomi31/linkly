@@ -3,7 +3,7 @@
 **Shorten your links. Share them easily. Track your clicks.**
 ## Home Page
 
-![Home Page](./frontend\public\Screenshot_22-10-2026_82752_localhost.jpeg)
+![Home Page](./frontend/public/Screenshot_22-10-2026_82752_localhost.jpeg)
 
 
 Linkly is a full-stack URL shortening application that transforms long URLs into short, shareable links. It includes user authentication, link management, click tracking, and QR-code generation in a simple dashboard.
