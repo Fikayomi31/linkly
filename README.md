@@ -268,5 +268,5 @@ Building Linkly has helped me practise:
 
 Full-stack developer focused on building practical web applications with Python, Flask, React, and REST APIs.
 
-- GitHub: [https://github.com/Fikayomi31/]
+- GitHub: https://github.com/Fikayomi31/
 
