@@ -55,7 +55,7 @@ function Home() {
     }
 
     setMessage(
-      "The interface is ready! Next, we'll connect it to Flask"
+      "Login to create a short link and track your clicks"
     );
   }
 
